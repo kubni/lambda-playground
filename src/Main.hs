@@ -1,14 +1,12 @@
 module Main where
 
+import qualified Text.Parsec as Parsec
+import Text.Parsec hiding (parse, runParser)
+
+
+
+
 type Name = String
-
--- TODO: GADTs
--- data Expr where
---   TmVar :: VarName -> Expr
---   TmAbs :: VarName -> Expr -> Expr
---   TmApp :: Expr -> Expr -> Expr
---   deriving (Eq, Show)
-
 
 -- Example abstraction: λx.x
 -- Example application: (λx.x) x
@@ -19,10 +17,10 @@ data Expr = Var Name
             deriving (Eq, Show)
 
 encode :: Expr -> String
-encode = go where
-  go (Var name) = name
-  go (Abs name body) = "λ" ++ name ++ "." ++ go body
-  go (App expr1 expr2) = "(" ++ go expr1 ++ ")" ++ go expr2
+encode = enc' where
+  enc' (Var name) = name
+  enc' (Abs name body) = "λ" ++ name ++ "." ++ enc' body
+  enc' (App expr1 expr2) = "(" ++ enc' expr1 ++ ")" ++ enc' expr2
 
 
 
