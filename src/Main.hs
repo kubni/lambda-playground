@@ -22,7 +22,7 @@ encode :: Expr -> String
 encode = go where
   go (Var name) = name
   go (Abs name body) = "λ" ++ name ++ "." ++ go body
-  go (App expr1 expr2) = "(" ++ go expr1 ++ go expr2 ++ ")"
+  go (App expr1 expr2) = "(" ++ go expr1 ++ ")" ++ go expr2
 
 
 
@@ -36,4 +36,7 @@ encode = go where
 
 
 main :: IO ()
-main = putStrLn "Hello, Haskell!"
+main = do
+  let expr2 = App (Abs "x" (Var "x")) (Var "y")
+  let mainExpr = Abs "x" (App (Abs "y" (Var "y")) expr2)
+  putStrLn $ encode mainExpr
